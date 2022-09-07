@@ -12,7 +12,11 @@ const CustomerSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true
-    }
+    },
+    productId:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Product'
+    }]
 },{
     timestamps:true
 });

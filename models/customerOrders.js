@@ -1,8 +1,9 @@
 const mongoose=require('mongoose');
 const OrderSchema=new mongoose.Schema({
-    customer:{
+    customerId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Customer'
+        ref:'Customer',
+        required:true
     },
     productList:[{
         type:mongoose.Schema.Types.ObjectId,

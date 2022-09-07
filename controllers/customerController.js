@@ -1,4 +1,5 @@
 const Customer= require('../models/customerDetails');
+const Product = require('../models/productDetails');
 
 module.exports.createCustomer=async function(req,res){
     try{
@@ -23,4 +24,49 @@ module.exports.createCustomer=async function(req,res){
             console.log(error);
             return;
         }
+}
+module.exports.fetchCustomer=async function(req,res){
+    let allCustomer=await Customer.find({});
+    if(allCustomer){
+        return res.status(200).json({
+            allCustomer:allCustomer,
+            message:'All customer fetched Successfully'
+        });
+    }
+    return res.status(404).json({
+        message:"unable to fetch customers list"
+    });
+}
+module.exports.fetchSpecificCustomerOrderList=async function(req,res){
+    console.log("customer id",req.params.customerId);
+    let customer=await Customer.find({"id":req.params.customerId}).populate('productId');
+    console.log(customer," is the customer who want to fetch specific customer order list");
+    if(customer){
+        let productListName=[];
+        // customer[0].productId.map((product)=>{
+            // Product.find({"id":product},function(err,productFound){
+            //     console.log(productFound," is productFound");
+            //     console.log(productFound[0].productName," is the productFound name");
+        //         productListName.push({[productName]:[productFound[0].productName]});
+        //         // productListName.save();
+        //     });
+        // });
+        console.log(customer," is customer[0] with product Id");
+        customer[0].productId.forEach((product)=>{
+            Product.find({"id":product},function(err,productFound){
+                console.log(productFound," is productFound");
+                console.log(productFound[0].productName," is the productFound name");
+            return productListName.push(productFound[0].productName);
+
+        })
+        })
+        console.log(typeof customer[0].productId," is product list name");
+        return res.status(200).json({
+            customerProductList:customer[0].productId,
+            message:"customer product Details fetched"
+        });
+    }
+    return res.status(404).json({
+        message:"Invalid customer Id or Unable to fetch Customer product Details"
+    })
 }

@@ -1,5 +1,10 @@
 const mongoose=require('mongoose');
 const ProductSchema=new mongoose.Schema({
+    productName:{
+        type:String,
+        required:true,
+        unique:true
+    },
     productCategory:{
         type:String,
         required:true
